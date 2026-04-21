@@ -102,6 +102,8 @@ tarred up under `/build/out/`.
 ### 3. Extract the tarball to your host
 
 ```bash
+docker ps -a
+docker start <nmap container>
 docker cp nmap-extract:/build/out/. ./
 docker rm nmap-extract
 ```
