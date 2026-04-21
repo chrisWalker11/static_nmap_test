@@ -155,6 +155,21 @@ enforcing, you'll need an allowlist entry or a path it trusts.
   ./nmap -sS -Pn -n 10.0.0.0/24
   ```
 
+- **Do NOT test on a modern host (Fedora, Ubuntu 22+)** — static glibc
+  still `dlopen`s host NSS modules at runtime (`libnss_files.so`,
+  `libnss_dns.so`). Those drag in the host's `libc.so.6`. If the host
+  glibc is newer than 2.28 (what this binary is built against), NSE
+  code paths like `-sCV` will segfault in `__libc_early_init`. The
+  binary is **fine** — just run it on the target (RHEL/CentOS/Rocky/
+  Alma 8, same glibc 2.28) or inside the build container for
+  smoke-testing:
+
+  ```bash
+  docker run --rm -v "$PWD/nmap-portable:/nm:Z" \
+      --entrypoint bash rockylinux:8 -c \
+      './nm/nmap -sCV -p 80 scanme.nmap.org'
+  ```
+
 - **Raw sockets still need root** (or `CAP_NET_RAW`) for `-sS`, OS
   detection, etc. Static linking doesn't change Linux capability
   requirements.

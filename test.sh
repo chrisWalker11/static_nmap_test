@@ -127,12 +127,14 @@ cp "$WORK/src/nmap-$NMAP_VER/nmap"        "$OUT/$BUNDLE/"
 cp "$WORK/src/nmap-$NMAP_VER/ncat/ncat"   "$OUT/$BUNDLE/" 2>/dev/null || true
 cp "$WORK/src/nmap-$NMAP_VER/nping/nping" "$OUT/$BUNDLE/" 2>/dev/null || true
 
-cp -r "$WORK/src/nmap-$NMAP_VER"/scripts/*.nse "$OUT/$BUNDLE/scripts/"
-cp -r "$WORK/src/nmap-$NMAP_VER"/nselib/*      "$OUT/$BUNDLE/nselib/" || true
+cp -a "$WORK/src/nmap-$NMAP_VER"/scripts/. "$OUT/$BUNDLE/scripts/"
+cp -a "$WORK/src/nmap-$NMAP_VER"/nselib/.  "$OUT/$BUNDLE/nselib/"
+[[ -f "$WORK/src/nmap-$NMAP_VER/docs/nmap.xsl" ]] && \
+    cp "$WORK/src/nmap-$NMAP_VER/docs/nmap.xsl" "$OUT/$BUNDLE/"
 
-# Core data files
+# Core data files (nse_main.lua is required for -sC / --script)
 for f in nmap-services nmap-protocols nmap-rpc nmap-mac-prefixes \
-         nmap-os-db nmap-service-probes nmap-payloads; do
+         nmap-os-db nmap-service-probes nmap-payloads nse_main.lua; do
     src="$WORK/src/nmap-$NMAP_VER/$f"
     [[ -f "$src" ]] && cp "$src" "$OUT/$BUNDLE/" || echo "  (skipping missing $f)"
 done

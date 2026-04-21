@@ -1,0 +1,6 @@
+src/
+opt/
+out/
+nmap-portable/
+*.tgz
+*.sha256
