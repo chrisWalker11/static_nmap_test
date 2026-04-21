@@ -1,0 +1,12 @@
+FROM rockylinux:8
+
+RUN dnf install -y dnf-plugins-core \
+ && dnf config-manager --set-enabled powertools \
+ && dnf install -y \
+        glibc-static libstdc++-static zlib-static \
+        gcc gcc-c++ make autoconf automake libtool pkgconfig \
+        perl-core python3 curl bzip2 xz tar file zlib-devel \
+ && dnf clean all
+
+WORKDIR /build
+ENTRYPOINT ["bash", "test.sh"]
