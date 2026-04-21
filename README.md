@@ -104,7 +104,7 @@ tarred up under `/build/out/`.
 ```bash
 docker ps -a
 docker start <nmap container>
-docker cp nmap-extract:/build/out/. ./
+docker cp <nmap container>:/build/out/. ./
 docker rm nmap-extract
 ```
 
